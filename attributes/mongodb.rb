@@ -1,105 +1,107 @@
 ### SOURCE PACKAGES
-default[:mongodb][:version]           = "1.6.4"
-default[:mongodb][:source]            = "http://fastdl.mongodb.org/linux/mongodb-linux-#{node[:kernel][:machine]}-#{mongodb[:version]}.tgz"
-default[:mongodb][:i686][:checksum]   = "e64d9f4ce31d789caef7370b863cf59d"
-default[:mongodb][:x86_64][:checksum] = "14f89864f3b58fc20f22ec0068325870"
+default[:mongodb][:server][:version]           = "1.8.0"
+default[:mongodb][:server][:source]            = "http://fastdl.mongodb.org/linux/mongodb-linux-#{node[:kernel][:machine]}-#{mongodb[:version]}.tgz"
+
+default[:mongodb][:server][:i686][:checksum]   = "bf95eb458ab7302523c402bf35265263"
+default[:mongodb][:server][:x86_64][:checksum] = "ab050d8b1a89dd3a52aa93eebcb27487"
 
 ### GENERAL
-default[:mongodb][:dir]         = "/opt/mongodb-#{mongodb[:version]}" # For install from source
-default[:mongodb][:datadir]     = "/var/db/mongodb"
-default[:mongodb][:config]      = "/etc/mongodb.conf"
-default[:mongodb][:logfile]     = "/var/log/mongodb.log"
-default[:mongodb][:pidfile]     = "/var/run/mongodb.pid"
-default[:mongodb][:port]        = 27017
+default[:mongodb][:server][:dir]         = "/opt/mongodb-#{mongodb[:version]}" # For install from source
+default[:mongodb][:server][:dbpath]      = "/var/lib/mongodb"
+default[:mongodb][:server][:config]      = "/etc/mongodb.conf"
+default[:mongodb][:server][:logfile]     = "/var/log/mongodb.log"
+default[:mongodb][:server][:pidfile]     = "/var/lib/mongodb/mongod.lock"
+default[:mongodb][:server][:port]        = 27017
 
-default[:mongodb][:bind_ip] = \
+bind_ip = \
   if node[:network][:interfaces][:eth0]
     node[:network][:interfaces][:eth0][:addresses].select{|address, values| values['family'] == 'inet'}.first.first
   else
     "0.0.0.0"
   end
 
+default[:mongodb][:server][:bind_ip] = bind_ip
 
 ### EXTRA
-default[:mongodb][:log_cpu_io]  = false
-default[:mongodb][:auth]        = false
-default[:mongodb][:username]    = ""
-default[:mongodb][:password]    = ""
-default[:mongodb][:verbose]     = false
-default[:mongodb][:objcheck]    = false
-default[:mongodb][:quota]       = false
-default[:mongodb][:diaglog]     = false
-default[:mongodb][:nocursors]   = false
-default[:mongodb][:nohints]     = false
-default[:mongodb][:nohttp]      = false
-default[:mongodb][:noscripting] = false
-default[:mongodb][:notablescan] = false
-default[:mongodb][:noprealloc]  = false
-default[:mongodb][:nssize]      = false
+default[:mongodb][:server][:cpu]         = false # log cpu and io
+default[:mongodb][:server][:auth]        = false
+default[:mongodb][:server][:username]    = ""
+default[:mongodb][:server][:password]    = ""
+default[:mongodb][:server][:verbose]     = false
+default[:mongodb][:server][:objcheck]    = false
+default[:mongodb][:server][:quota]       = false
+default[:mongodb][:server][:diaglog]     = false
+default[:mongodb][:server][:nocursors]   = false
+default[:mongodb][:server][:nohints]     = false
+default[:mongodb][:server][:nohttpinterface] = false
+default[:mongodb][:server][:noscripting] = false
+default[:mongodb][:server][:notablescan] = false
+default[:mongodb][:server][:noprealloc]  = false
+default[:mongodb][:server][:nssize]      = false
 
 
 
 ### STARTUP
-default[:mongodb][:rest]        = false
-default[:mongodb][:syncdelay]   = 60
+default[:mongodb][:server][:rest]        = false
+default[:mongodb][:server][:syncdelay]   = 60
 
 
 
 ### MMS
-default[:mongodb][:mms]       = false
-default[:mongodb][:token]     = ""
-default[:mongodb][:name]      = ""
-default[:mongodb][:interval]  = ""
+default[:mongodb][:server][:mms]            = false
+default[:mongodb][:server]['mms-token']     = ""
+default[:mongodb][:server]['mms-name']      = ""
+default[:mongodb][:server]['mms-interval']  = ""
 
 
 
 ### REPLICATION
-default[:mongodb][:replication]   = false
-default[:mongodb][:slave]         = false
-default[:mongodb][:slave_source]  = ""
-default[:mongodb][:slave_only]    = ""
+default[:mongodb][:server][:replication]   = false
+default[:mongodb][:server][:slave]         = false
+default[:mongodb][:server][:slave_source]  = ""
+default[:mongodb][:server][:slave_only]    = ""
 
-default[:mongodb][:master]        = false
-default[:mongodb][:master_source] = ""
+default[:mongodb][:server][:master]        = false
+default[:mongodb][:server][:master_source] = ""
 
-default[:mongodb][:autoresync]    = false
-default[:mongodb][:oplogsize]     = 0
-default[:mongodb][:opidmem]       = 0
+default[:mongodb][:server][:autoresync]    = false
+default[:mongodb][:server][:oplogsize]     = 0
+default[:mongodb][:server][:opidmem]       = 0
 
-default[:mongodb][:replica_set]   = ""
+default[:mongodb][:server][:replSet]       = ""
 
 
 
 ### SHARDING
-default[:mongodb][:shard_server]  = false
+default[:mongodb][:server][:shard_server]  = false
 
 
 
 ### BACKUP
-default[:mongodb][:backup][:host]         = "localhost"
-default[:mongodb][:backup][:backupdir]    = "/var/backups/mongodb"
-default[:mongodb][:backup][:day]          = 6
-default[:mongodb][:backup][:compression]  = "bzip2"
-default[:mongodb][:backup][:cleanup]      = "yes"
-default[:mongodb][:backup][:latest]       = "yes"
-default[:mongodb][:backup][:mailaddress]  = false
-default[:mongodb][:backup][:mailcontent]  = "stdout"
-default[:mongodb][:backup][:maxemailsize] = 4000
+default[:mongodb][:server][:backup][:host]         = "localhost"
+default[:mongodb][:server][:backup][:backupdir]    = "/var/backups/mongodb"
+default[:mongodb][:server][:backup][:day]          = 6
+default[:mongodb][:server][:backup][:compression]  = "bzip2"
+default[:mongodb][:server][:backup][:cleanup]      = "yes"
+default[:mongodb][:server][:backup][:latest]       = "yes"
+default[:mongodb][:server][:backup][:mailaddress]  = false
+default[:mongodb][:server][:backup][:mailcontent]  = "stdout"
+default[:mongodb][:server][:backup][:maxemailsize] = 4000
 
 
 ### CONFIG SERVER
-default[:mongodb][:config_server][:datadir]     = "/var/db/mongodb-config"
-default[:mongodb][:config_server][:config]      = "/etc/mongodb-config.conf"
-default[:mongodb][:config_server][:logfile]     = "/var/log/mongodb-config.log"
-default[:mongodb][:config_server][:pidfile]     = "/var/run/mongodb-config.pid"
-default[:mongodb][:config_server][:host]        = "localhost"
-default[:mongodb][:config_server][:port]        = 27019
+default[:mongodb][:config_server][:dbpath]  = "/var/lib/mongodb-config_server"
+default[:mongodb][:config_server][:config]  = "/etc/mongodb-config_server.conf"
+default[:mongodb][:config_server][:logfile] = "/var/log/mongodb-config_server.log"
+default[:mongodb][:config_server][:pidfile] = "/var/lib/mongodb-config_server/mongod.lock"
+default[:mongodb][:config_server][:bind_ip] = bind_ip
+default[:mongodb][:config_server][:port]    = 27019
 
 
 
 ### MONGOS
-default[:mongodb][:mongos][:config]      = "/etc/mongos.conf"
-default[:mongodb][:mongos][:logfile]     = "/var/log/mongos.log"
-default[:mongodb][:mongos][:pidfile]     = "/var/run/mongos.pid"
-default[:mongodb][:mongos][:host]        = "localhost"
-default[:mongodb][:mongos][:port]        = 27017
+default[:mongodb][:mongos][:config]  = "/etc/mongos.conf"
+default[:mongodb][:mongos][:logfile] = "/var/log/mongos.log"
+default[:mongodb][:mongos][:pidfile] = "/var/lib/mongodb/mongos.lock"
+default[:mongodb][:mongos][:bind_ip] = bind_ip
+default[:mongodb][:mongos][:port]    = 27017

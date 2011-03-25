@@ -36,6 +36,6 @@ template "/etc/apt/sources.list.d/mongodb.list" do
   notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
-package "mongodb-stable"
+package "mongodb-10gen"
 
 node[:mongodb][:installed_from] = "apt"

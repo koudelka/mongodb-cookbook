@@ -19,48 +19,4 @@
 # limitations under the License.
 #
 
-directory node[:mongodb][:config_server][:datadir] do
-  owner "mongodb"
-  group "mongodb"
-  mode 0755
-  recursive true
-end
-
-file node[:mongodb][:config_server][:logfile] do
-  owner "mongodb"
-  group "mongodb"
-  mode 0644
-  action :create_if_missing
-  backup false
-end
-
-template node[:mongodb][:config_server][:config] do
-  source "mongodb.conf.erb"
-  owner "mongodb"
-  group "mongodb"
-  mode 0644
-  backup false
-  variables({:is_config_server => true})
-end
-
-template "/etc/init.d/mongodb-config" do
-  source "mongodb.init.erb"
-  mode 0755
-  backup false
-  variables({:is_config_server => true})
-end
-
-service "mongodb-config" do
-  supports :start => true, :stop => true, "force-stop" => true, :restart => true, "force-reload" => true, :status => true
-  action [:enable, :start]
-  subscribes :restart, resources(:template => node[:mongodb][:config_server][:config])
-  subscribes :restart, resources(:template => "/etc/init.d/mongodb-config")
-end
-
-# cookbook_file "/etc/logrotate.d/mongodb-config" do
-#   source "logrotate"
-#   cookbook "mongodb"
-#   owner "mongodb"
-#   group "mongodb"
-#   mode "0644"
-# end
+mongodb_process(:config_server)

@@ -1,0 +1,32 @@
+<%
+@config = @node[:mongodb][@server_type]
+
+@binary = @server_type == :mongos ? 'mongos' : 'mongod'
+%>
+
+# Ubuntu upstart file at /etc/init/mongo-<%= @server_type %>.conf
+# Managed by Chef, no touchy.
+
+pre-start script
+<% if @config[:dbpath] %>
+    mkdir -p <%= @config[:dbpath] %>
+    chown -R mongodb:mongodb <%= @config[:dbpath] %>
+<% end %>
+    mkdir -p <%= File.dirname(@config[:logfile]) %>
+end script
+
+start on runlevel [2345]
+stop on runlevel [06]
+
+script
+<%
+  @options = [
+    "--config #{@config[:config]}"
+  ]
+
+  @options << '--configsvr' if @server_type == :config_server
+  @options << "--configdb #{@configdb_server_list}" if @server_type == :mongos
+%>
+  if [ -f /etc/default/mongodb ]; then . /etc/default/mongodb; fi
+  exec start-stop-daemon --start --quiet --chuid mongodb --startas /usr/bin/<%= @binary %> --pidfile <%= @config[:pidfile] %> -- <%= @options.join(' ') %>
+end script
