@@ -1,7 +1,7 @@
 maintainer        "Paper Cavalier"
 maintainer_email  "code@papercavalier.com"
 license           "Apache 2.0"
-description       "Installs and configures MongoDB 1.8.0"
+description       "Installs and configures MongoDB 1.8.1"
 version           "0.2.6"
 
 recipe "mongodb::apt", "Installs MongoDB from 10Gen's apt source and includes init.d script"
@@ -16,7 +16,7 @@ end
 attribute "mongodb/version",
   :display_name => "MongoDB version",
   :description => "Which MongoDB version will be installed",
-  :default => "1.8.0"
+  :default => "1.8.1"
 
 attribute "mongodb/source",
   :display_name => "MongoDB source file",
@@ -25,12 +25,12 @@ attribute "mongodb/source",
 attribute "mongodb/i686/checksum",
   :display_name => "MongoDB 32bit source file checksum",
   :description => "Will make sure the source file is the real deal",
-  :default => "bf95eb458ab7302523c402bf35265263"
+  :default => "7970858350cda1f3eed4b967e67a64f8"
 
 attribute "mongodb/x86_64/checksum",
   :display_name => "MongoDB 64bit source file checksum",
   :description => "Will make sure the source file is the real deal",
-  :default => "ab050d8b1a89dd3a52aa93eebcb27487"
+  :default => "58ebc4c9e1befd9847029592011fb9ed"
 
 
 
@@ -38,7 +38,7 @@ attribute "mongodb/x86_64/checksum",
 attribute "mongodb/dir",
   :display_name => "MongoDB installation path",
   :description => "MongoDB will be installed here",
-  :default => "/opt/mongodb-1.8.0"
+  :default => "/opt/mongodb-1.8.1"
 
 attribute "mongodb/datadir",
   :display_name => "MongoDB data store",
